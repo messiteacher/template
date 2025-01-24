@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/posts")
 public class PostController {
 
-    List<Post> posts = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
+    private long lastId = 3L;
 
     public PostController() {
 
@@ -68,7 +69,6 @@ public class PostController {
     }
 
     @PostMapping("/write")
-    @ResponseBody
     public String doWrite(@Valid WriteForm form, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -83,11 +83,15 @@ public class PostController {
             return getFormHtml(errorMessage, form.getTitle(), form.getContent());
         }
 
-        return """
-                <h1>게시물 조회</h1>
-                <div>%s</div>
-                <div>%s</div>
-                """.formatted(form.getTitle(), form.getContent());
+        Post post = Post.builder()
+                .id(++lastId)
+                .title(form.getTitle())
+                .content(form.getContent())
+                .build();
+
+        posts.add(post);
+
+        return "redirect:/posts";
     }
 
     private String getFormHtml(String errorMsg, String title, String content) {
@@ -106,13 +110,16 @@ public class PostController {
     @ResponseBody
     public String showList() {
 
+        String lis = posts.stream()
+                .map(p -> "<li>" + p.getTitle() + "</li>")
+                .collect(Collectors.joining());
+
+        String ul = "<ul>" + lis + "</ul>";
+
         return """
                 <div>글 목록</div>
-                <ul>
-                    <li>글1</li>
-                    <li>글2</li>
-                    <li>글3</li>
-                </ul>
-                """;
+                %s
+                <a href="/posts/write">글쓰기</a>
+                """.formatted(ul);
     }
 }
