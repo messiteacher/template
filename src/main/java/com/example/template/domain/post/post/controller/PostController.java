@@ -1,5 +1,6 @@
 package com.example.template.domain.post.post.controller;
 
+import com.example.template.domain.post.post.entity.Post;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -12,11 +13,40 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/posts")
 public class PostController {
+
+    List<Post> posts = new ArrayList<>();
+
+    public PostController() {
+
+        Post p1 = Post.builder()
+                .id(1L)
+                .title("title1")
+                .content("content")
+                .build();
+
+        Post p2 = Post.builder()
+                .id(2L)
+                .title("title2")
+                .content("content")
+                .build();
+
+        Post p3 = Post.builder()
+                .id(3L)
+                .title("title3")
+                .content("content")
+                .build();
+
+        posts.add(p1);
+        posts.add(p2);
+        posts.add(p3);
+    }
 
     @GetMapping("/write")
     @ResponseBody
@@ -70,5 +100,19 @@ public class PostController {
                   <input type="submit" value="등록" /> <br>
                 </form>
                 """.formatted(errorMsg, title, content);
+    }
+
+    @GetMapping
+    @ResponseBody
+    public String showList() {
+
+        return """
+                <div>글 목록</div>
+                <ul>
+                    <li>글1</li>
+                    <li>글2</li>
+                    <li>글3</li>
+                </ul>
+                """;
     }
 }
