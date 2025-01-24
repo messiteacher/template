@@ -50,9 +50,8 @@ public class PostController {
     }
 
     @GetMapping("/write")
-    @ResponseBody
     public String showWrite() {
-        return getFormHtml("", "", "");
+        return "domain/post/post/write";
     }
 
     @AllArgsConstructor
@@ -80,7 +79,7 @@ public class PostController {
                     .map(msg -> msg.split("-")[1])
                     .collect(Collectors.joining("<br>"));
 
-            return getFormHtml(errorMessage, form.getTitle(), form.getContent());
+            return "domain/post/post/write";
         }
 
         Post post = Post.builder()
