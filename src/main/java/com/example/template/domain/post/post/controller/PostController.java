@@ -3,6 +3,7 @@ package com.example.template.domain.post.post.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +21,7 @@ public class PostController {
     }
 
     @AllArgsConstructor
+    @Getter
     public static class WriteForm {
 
         @NotBlank(message = "제목을 입력해주세요.") @Length(min = 5, message = "제목은 5글자 이상입니다.")
@@ -37,7 +39,7 @@ public class PostController {
                 <h1>게시물 조회</h1>
                 <div>%s</div>
                 <div>%s</div>
-                """.formatted(form.title, form.content);
+                """.formatted(form.getTitle(), form.getContent());
     }
 
     private String getFormHtml(String errorMsg) {
